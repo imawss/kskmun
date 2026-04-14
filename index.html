@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KSKMUN — Applications</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --crimson:       #7B090B;
+      --crimson-glow:  rgba(123, 9, 11, 0.55);
+      --green:         #3F8664;
+      --green-glow:    rgba(63, 134, 100, 0.45);
+      --glass-bg:      rgba(255, 255, 255, 0.06);
+      --glass-border:  rgba(255, 255, 255, 0.14);
+      --glass-hover:   rgba(255, 255, 255, 0.11);
+      --text:          rgba(255, 255, 255, 0.92);
+      --text-muted:    rgba(255, 255, 255, 0.55);
+      --text-faint:    rgba(255, 255, 255, 0.32);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0b0203;
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .bg-scene {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background: radial-gradient(ellipse 80% 60% at 20% 10%,  rgba(123,9,11,0.35) 0%, transparent 60%),
+                  radial-gradient(ellipse 70% 50% at 80% 80%,  rgba(63,134,100,0.28) 0%, transparent 60%),
+                  radial-gradient(ellipse 50% 40% at 60% 20%,  rgba(63,134,100,0.15) 0%, transparent 50%),
+                  linear-gradient(160deg, #0e0304 0%, #080f0c 100%);
+    }
+
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.45;
+      animation: drift 18s ease-in-out infinite alternate;
+    }
+    .blob-1 { width: 500px; height: 500px; background: var(--crimson); top: -120px; left: -100px; animation-duration: 20s; }
+    .blob-2 { width: 420px; height: 420px; background: var(--green);   bottom: 10%;  right: -80px;  animation-duration: 25s; animation-delay: -8s; }
+    .blob-3 { width: 300px; height: 300px; background: var(--crimson); bottom: 30%;  left: 20%;     animation-duration: 22s; animation-delay: -4s; opacity: 0.2; }
+
+    @keyframes drift {
+      from { transform: translate(0, 0) scale(1); }
+      to   { transform: translate(40px, 30px) scale(1.08); }
+    }
+
+    header, main, footer { position: relative; z-index: 1; }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      background: rgba(11, 2, 3, 0.55);
+      border-bottom: 1px solid var(--glass-border);
+      padding: 0 clamp(1rem, 4vw, 2.5rem);
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .header-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1.5px solid rgba(255,255,255,0.25);
+      box-shadow: 0 0 12px var(--crimson-glow);
+    }
+
+    .header-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--text);
+    }
+
+    .header-nav {
+      display: flex;
+      gap: 1.8rem;
+      align-items: center;
+    }
+
+    .header-nav a {
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .header-nav a:hover { color: var(--text); }
+
+    .hero {
+      text-align: center;
+      padding: clamp(5rem, 12vw, 9rem) clamp(1rem, 4vw, 2rem) clamp(4rem, 8vw, 6rem);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      color: var(--text-muted);
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 0.4rem 1.1rem;
+      border-radius: 100px;
+      margin-bottom: 2rem;
+      backdrop-filter: blur(8px);
+    }
+
+    .hero-logo {
+      width: clamp(80px, 15vw, 120px);
+      height: clamp(80px, 15vw, 120px);
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid rgba(255,255,255,0.2);
+      box-shadow: 0 0 0 8px rgba(123,9,11,0.15), 0 0 40px var(--crimson-glow);
+      margin-bottom: 2rem;
+    }
+
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3rem, 8vw, 5.5rem);
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      line-height: 1;
+      margin-bottom: 1.2rem;
+    }
+
+    .hero h1 em {
+      display: block;
+      font-style: italic;
+      font-weight: 400;
+      font-size: 0.38em;
+      letter-spacing: 0.22em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-sub {
+      font-size: clamp(0.9rem, 2vw, 1.05rem);
+      font-weight: 300;
+      color: var(--text-muted);
+      max-width: 520px;
+      line-height: 1.75;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .hero-cta:hover { color: var(--text-muted); }
+    .hero-cta svg { animation: bob 2s ease-in-out infinite; }
+    @keyframes bob {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(6px); }
+    }
+
+    .glass {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      backdrop-filter: blur(18px) saturate(150%);
+      -webkit-backdrop-filter: blur(18px) saturate(150%);
+    }
+
+    .countdown-section {
+      padding: 0 clamp(1rem, 4vw, 2rem) clamp(3.5rem, 7vw, 5rem);
+    }
+
+    .countdown-wrap {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    .countdown-label {
+      text-align: center;
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 0.5rem;
+    }
+
+    .countdown-title {
+      text-align: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 2rem;
+    }
+
+    .countdown-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: clamp(0.6rem, 2vw, 1.2rem);
+    }
+
+    .countdown-card {
+      padding: clamp(1rem, 3vw, 1.8rem) 0.5rem;
+      border-radius: 14px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s;
+    }
+
+    .countdown-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .countdown-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.2rem, 6vw, 4rem);
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #fff 30%, rgba(255,255,255,0.55));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      display: block;
+      margin-bottom: 0.4rem;
+    }
+
+    .countdown-unit {
+      font-size: clamp(0.6rem, 1.5vw, 0.72rem);
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+    }
+
+    .countdown-card--days   { border-color: rgba(123,9,11,0.5);  box-shadow: 0 4px 24px rgba(123,9,11,0.2); }
+    .countdown-card--hours  { border-color: rgba(63,134,100,0.4); box-shadow: 0 4px 24px rgba(63,134,100,0.15); }
+    .countdown-card--mins   { border-color: rgba(123,9,11,0.4);  box-shadow: 0 4px 24px rgba(123,9,11,0.15); }
+    .countdown-card--secs   { border-color: rgba(63,134,100,0.5); box-shadow: 0 4px 24px rgba(63,134,100,0.2); }
+
+    .countdown-ended {
+      text-align: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      font-style: italic;
+      color: var(--text-muted);
+      padding: 2rem 0;
+    }
+
+    .section-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: clamp(3rem, 6vw, 5rem) clamp(1rem, 4vw, 2rem);
+    }
+
+    .section-eyebrow {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 0.5rem;
+    }
+
+    .section-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 0.8rem;
+    }
+
+    .section-sub {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      max-width: 500px;
+      line-height: 1.75;
+      margin-bottom: 2.5rem;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+      gap: clamp(0.8rem, 2vw, 1.4rem);
+    }
+
+    .card {
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+      padding: clamp(1.4rem, 3vw, 2rem) clamp(1.2rem, 3vw, 1.75rem);
+      border-radius: 16px;
+      text-decoration: none;
+      color: var(--text);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+      cursor: pointer;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.07) 0%, transparent 55%);
+      pointer-events: none;
+    }
+
+    .card:hover {
+      background: var(--glass-hover);
+      transform: translateY(-5px);
+    }
+
+    .card--crimson:hover { box-shadow: 0 16px 48px rgba(123,9,11,0.35); border-color: rgba(123,9,11,0.6); }
+    .card--green:hover   { box-shadow: 0 16px 48px rgba(63,134,100,0.3);  border-color: rgba(63,134,100,0.55); }
+
+    .card-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .card--crimson .card-icon { background: rgba(123,9,11,0.25);  border: 1px solid rgba(123,9,11,0.4); }
+    .card--green   .card-icon { background: rgba(63,134,100,0.2); border: 1px solid rgba(63,134,100,0.35); }
+
+    .card-icon svg { width: 22px; height: 22px; }
+
+    .card-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.15rem, 2.5vw, 1.4rem);
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .card-desc {
+      font-size: clamp(0.8rem, 1.8vw, 0.88rem);
+      color: var(--text-muted);
+      line-height: 1.7;
+      flex: 1;
+    }
+
+    .card-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: 0.3rem;
+      transition: gap 0.2s;
+    }
+    .card--crimson .card-cta { color: #e05a5c; }
+    .card--green   .card-cta { color: #5dbf95; }
+    .card:hover .card-cta    { gap: 0.65rem; }
+
+    .divider {
+      border: none;
+      border-top: 1px solid rgba(255,255,255,0.07);
+      margin: 0 clamp(1rem, 4vw, 2rem);
+    }
+
+    .contact-glass {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: clamp(1.5rem, 4vw, 2.5rem) clamp(1.5rem, 4vw, 2.5rem);
+      border-radius: 20px;
+      text-align: center;
+    }
+
+    .contact-glass .section-eyebrow { text-align: center; }
+    .contact-glass .section-heading { text-align: center; }
+
+    .contact-glass p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.75;
+      margin-top: 0.5rem;
+    }
+
+    .contact-glass a {
+      color: #5dbf95;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .contact-glass a:hover { color: #88d9b8; }
+
+    footer {
+      text-align: center;
+      padding: clamp(2rem, 4vw, 3rem) clamp(1rem, 4vw, 2rem);
+      border-top: 1px solid rgba(255,255,255,0.07);
+      font-size: 0.8rem;
+      color: var(--text-faint);
+    }
+
+    footer strong { color: var(--text-muted); }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1.2rem;
+      margin: 0.8rem 0;
+    }
+
+    .footer-links a {
+      color: var(--text-faint);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--text-muted); }
+
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .nav-toggle span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--text-muted);
+      border-radius: 2px;
+      transition: transform 0.2s, opacity 0.2s;
+    }
+
+    @media (max-width: 640px) {
+      .header-nav { display: none; }
+      .nav-toggle  { display: flex; }
+
+      .header-nav.open {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 68px;
+        left: 0;
+        right: 0;
+        background: rgba(11,2,3,0.92);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--glass-border);
+        padding: 1.2rem 1.5rem;
+        gap: 1rem;
+      }
+
+      .countdown-grid { grid-template-columns: repeat(2, 1fr); }
+
+      .cards-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 380px) {
+      .countdown-grid { gap: 0.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-scene" aria-hidden="true">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+
+<header>
+  <a class="header-brand" href="#">
+    <img class="header-logo" src="logo.jpeg" alt="KSKMUN Logo" />
+    <span class="header-name">KSKMUN</span>
+  </a>
+  <nav class="header-nav" id="main-nav">
+    <a href="#countdown">Conference</a>
+    <a href="#apply">Apply</a>
+    <a href="#contact">Contact</a>
+  </nav>
+  <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<main>
+
+  <section class="hero">
+    <div class="hero-badge">Official Applications Portal</div>
+    <img class="hero-logo" src="logo.jpeg" alt="KSKMUN" />
+    <h1>
+      <em>Welcome to</em>
+      KSKMUN
+    </h1>
+    <p class="hero-sub">
+      Join us for an unforgettable Model United Nations experience.
+      Select your role below and complete the application form to get started.
+    </p>
+    <a class="hero-cta" href="#countdown">
+      See conference date
+      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+      </svg>
+    </a>
+  </section>
+
+  <section class="countdown-section" id="countdown">
+    <div class="countdown-wrap">
+      <p class="countdown-label">Mark Your Calendar</p>
+      <h2 class="countdown-title">Conference Begins In</h2>
+      <div class="countdown-grid" id="countdown-grid" data-target="2026-06-15T09:00:00">
+        <div class="card glass countdown-card countdown-card--days">
+          <span class="countdown-num" id="cd-days">--</span>
+          <span class="countdown-unit">Days</span>
+        </div>
+        <div class="card glass countdown-card countdown-card--hours">
+          <span class="countdown-num" id="cd-hours">--</span>
+          <span class="countdown-unit">Hours</span>
+        </div>
+        <div class="card glass countdown-card countdown-card--mins">
+          <span class="countdown-num" id="cd-mins">--</span>
+          <span class="countdown-unit">Minutes</span>
+        </div>
+        <div class="card glass countdown-card countdown-card--secs">
+          <span class="countdown-num" id="cd-secs">--</span>
+          <span class="countdown-unit">Seconds</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-wrap" id="apply">
+    <p class="section-eyebrow">Join KSKMUN</p>
+    <h2 class="section-heading">Choose Your Role</h2>
+    <p class="section-sub">
+      Each department has a separate application form.
+      Tap the card that matches your desired role to open the Google Form.
+    </p>
+
+    <div class="cards-grid">
+
+      <a class="card glass card--crimson" href="DELEGATE_FORM_LINK_HERE" target="_blank" rel="noopener">
+        <div class="card-icon">
+          <svg fill="none" viewBox="0 0 24 24" stroke="#e05a5c" stroke-width="1.8">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+          </svg>
+        </div>
+        <div class="card-title">Delegate</div>
+        <p class="card-desc">Represent a nation in one of our committees. Research, debate, and draft resolutions on pressing global issues.</p>
+        <span class="card-cta">
+          Apply Now
+          <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+          </svg>
+        </span>
+      </a>
+
+      <a class="card glass card--green" href="ADMIN_FORM_LINK_HERE" target="_blank" rel="noopener">
+        <div class="card-icon">
+          <svg fill="none" viewBox="0 0 24 24" stroke="#5dbf95" stroke-width="1.8">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+          </svg>
+        </div>
+        <div class="card-title">Admin &amp; Secretariat</div>
+        <p class="card-desc">Be part of the organizing backbone of KSKMUN. Manage logistics, communications, and conference operations.</p>
+        <span class="card-cta">
+          Apply Now
+          <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+          </svg>
+        </span>
+      </a>
+
+      <a class="card glass card--crimson" href="CHAIR_FORM_LINK_HERE" target="_blank" rel="noopener">
+        <div class="card-icon">
+          <svg fill="none" viewBox="0 0 24 24" stroke="#e05a5c" stroke-width="1.8">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+          </svg>
+        </div>
+        <div class="card-title">Chair / Dais</div>
+        <p class="card-desc">Lead a committee as Chair or Vice-Chair. Guide debates, manage procedure, and ensure productive sessions.</p>
+        <span class="card-cta">
+          Apply Now
+          <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+          </svg>
+        </span>
+      </a>
+
+      <a class="card glass card--green" href="PRESS_FORM_LINK_HERE" target="_blank" rel="noopener">
+        <div class="card-icon">
+          <svg fill="none" viewBox="0 0 24 24" stroke="#5dbf95" stroke-width="1.8">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
+          </svg>
+        </div>
+        <div class="card-title">Press Corps</div>
+        <p class="card-desc">Cover the conference as a journalist. Write reports, conduct interviews, and capture the spirit of KSKMUN.</p>
+        <span class="card-cta">
+          Apply Now
+          <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+          </svg>
+        </span>
+      </a>
+
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <section class="section-wrap" id="contact" style="padding-top: 3rem; padding-bottom: 4rem;">
+    <div class="contact-glass glass">
+      <p class="section-eyebrow">Need Help?</p>
+      <h2 class="section-heading">Contact Us</h2>
+      <p>
+        Questions about the application process? Reach out to the Secretariat at
+        <a href="mailto:secretariat@kskmun.com">secretariat@kskmun.com</a>
+        or follow us on social media for the latest updates.
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <strong>KSKMUN</strong> — Model United Nations
+  <div class="footer-links">
+    <a href="#">Instagram</a>
+    <a href="#">Twitter / X</a>
+    <a href="#">LinkedIn</a>
+  </div>
+  <div style="margin-top: 0.6rem; font-size: 0.72rem;">&copy; 2026 KSKMUN. All rights reserved.</div>
+</footer>
+
+<script>
+  const toggle = document.getElementById('nav-toggle');
+  const nav    = document.getElementById('main-nav');
+  toggle.addEventListener('click', () => nav.classList.toggle('open'));
+  nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => nav.classList.remove('open')));
+
+  const grid   = document.getElementById('countdown-grid');
+  const target = new Date(grid.dataset.target).getTime();
+
+  const pad = n => String(n).padStart(2, '0');
+
+  function tick() {
+    const now  = Date.now();
+    const diff = target - now;
+
+    if (diff <= 0) {
+      grid.innerHTML = '<p class="countdown-ended" style="grid-column:1/-1">The conference has begun!</p>';
+      return;
+    }
+
+    const days  = Math.floor(diff / 86400000);
+    const hours = Math.floor((diff % 86400000) / 3600000);
+    const mins  = Math.floor((diff % 3600000)  / 60000);
+    const secs  = Math.floor((diff % 60000)    / 1000);
+
+    document.getElementById('cd-days').textContent  = days;
+    document.getElementById('cd-hours').textContent = pad(hours);
+    document.getElementById('cd-mins').textContent  = pad(mins);
+    document.getElementById('cd-secs').textContent  = pad(secs);
+  }
+
+  tick();
+  setInterval(tick, 1000);
+</script>
+
+</body>
+</html>
